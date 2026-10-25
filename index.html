@@ -41,13 +41,13 @@ label{font-size:13px;color:var(--sl)}
 @media(max-width:760px){.hb{display:block;font-size:18px}.demo{display:none}.top{padding:8px 10px;gap:8px}.top button{font-size:13px;padding:5px 8px}.adm{flex-direction:column}.side{display:none}.two{grid-template-columns:1fr}.main{padding:12px}h1{font-size:22px}}
 @media print{#app,#dr{display:none!important}.modal{position:static;background:#fff;padding:0;display:block}.top,.side,.nav,.noprint,.toast{display:none!important}.card{border:0}body{background:#fff}}
 </style></head><body>
-<div class="top"><button class="hb" onclick="S.menu=1;render()" aria-label="Open menu">☰</button><b>SKY<i>VAULT</i></b><span class="demo">Private Aviation · working name · Interactive Demo — Illustrative Data</span><span class="sp"></span>
-<button id="mp" onclick="setMode('pax')">Passenger app</button><button id="ma" onclick="setMode('adm')">Admin portal</button><button onclick="init();render();toast('Demo data reset')">Reset demo data</button></div>
+<div class="top"><button class="hb" onclick="S.menu=1;render()" aria-label="Open menu">☰</button><b>SKY<i>VAULT</i></b><span class="demo">Private Aviation · working name · Interactive Demo — Illustrative Data</span><span class="sp"></span><span id="who" class="demo"></span>
+<button id="mp" onclick="setMode('pax')">Passenger app</button><button id="ma" onclick="setMode('adm')">Admin portal</button><button onclick="init();render();toast('Demo data reset')">Reset demo data</button><button id="so" onclick="S.auth=null;S.menu=0;S.ae='';S.am='login';render()">Sign out</button></div>
 <div id="app"></div><div id="ov"></div><div id="dr"></div><div id="ts"></div>
 <script>
 const $=s=>document.getElementById(s),LIFE=['Scheduled','Preparation in Progress','Ready for Departure','Departed','Arrived','Completed'];
-const BUF=60,ME='CUST-1';let S;
-function init(){const L=(t,m,k,a)=>({t,m,k,a}),K=(id,f,t,d,dep,arr,st,pilot,ops,fuel)=>({id,f,t,d,dep,arr,st,pilot,ops,fuel:fuel||[],notes:''}),B=(id,c,cn,s,n,names,st,h)=>({id,c,cn,s,n,names,notes:'',st,h}),E=' · entered by Operations Manager';
+const BUF=60;let S,ME='CUST-1';
+function init(){ME='CUST-1';const L=(t,m,k,a)=>({t,m,k,a}),K=(id,f,t,d,dep,arr,st,pilot,ops,fuel)=>({id,f,t,d,dep,arr,st,pilot,ops,fuel:fuel||[],notes:''}),B=(id,c,cn,s,n,names,st,h)=>({id,c,cn,s,n,names,notes:'',st,h}),E=' · entered by Operations Manager';
 S={mode:'pax',pv:'home',av:'dash',sel:null,ss:null,form:{},q:'',fq:'All',err:'',note:'',menu:0,seq:15,
 log:[L('24 Oct 2026 09:42','SV-2026-012 requested by Rajesh Bhatt','Bookings','Passenger'),L('24 Oct 2026 08:15','SV-2026-004 requested by Isha Trivedi','Bookings','Passenger'),L('23 Oct 2026 18:30','SV-2026-003 requested by Karan Joshi','Bookings','Passenger'),L('22 Oct 2026 15:05','SV-2026-014 rejected: slot reserved for company use','Bookings','Booking Admin'),L('22 Oct 2026 11:20','SV-2026-013 information requested','Bookings','Booking Admin'),L('21 Oct 2026 12:10','FS-11 status → Completed','Operations','Operations Manager'),L('21 Oct 2026 07:15','FS-11 fuel record added','Operations','Operations Manager'),L('20 Oct 2026 16:40','FS-07: Capt. Vivek Rana assigned','Pilots','Operations Manager'),L('19 Oct 2026 10:00','FS-07 marked full','Schedule','Operations Manager'),L('18 Oct 2026 09:30','FS-10 cancelled','Schedule','Operations Manager'),L('15 Oct 2026 13:00','FS-09 status → Completed','Operations','Operations Manager'),L('12 Oct 2026 10:30','FS-08 status → Completed','Operations','Operations Manager'),L('10 Oct 2026 09:00','FS-02 published','Schedule','Operations Manager')],
 slots:[K('FS-01','AMD','BOM','2026-10-28','09:00','10:30','available','','Scheduled'),K('FS-02','BOM','DEL','2026-10-29','14:00','16:15','available','P-102','Scheduled'),K('FS-03','AMD','PNQ','2026-10-28','10:00','11:30','draft','','Scheduled'),K('FS-04','PNQ','DEL','2026-10-31','08:30','10:45','available','','Scheduled'),K('FS-05','DEL','AMD','2026-11-02','11:00','13:00','available','','Scheduled'),K('FS-06','AMD','DEL','2026-11-05','07:30','09:30','available','','Scheduled'),K('FS-07','BOM','AMD','2026-11-07','16:00','17:20','full','P-103','Scheduled'),
@@ -66,10 +66,10 @@ B('SV-2026-010','CUST-8','Dhruv Amin','FS-07',5,'Dhruv Amin +4','Confirmed',['Re
 B('SV-2026-011','CUST-9','Kavya Nair','FS-07',3,'Kavya Nair +2','Confirmed',['Requested 20 Oct 2026','Approved by Booking Admin']),
 B('SV-2026-012','CUST-10','Rajesh Bhatt','FS-04',2,'Rajesh Bhatt, Dipa Bhatt','Pending',['Requested 24 Oct 2026']),
 B('SV-2026-013','CUST-11','Sneha Kulkarni','FS-05',1,'Sneha Kulkarni','Info Required',['Requested 22 Oct 2026','Information requested: preferred arrival terminal']),
-B('SV-2026-014','CUST-12','Manish Gandhi','FS-06',4,'Manish Gandhi +3','Rejected',['Requested 21 Oct 2026','Rejected: slot reserved for company use'])],inv:{},air:{status:'In service'},lf:'All',bv:'slot',lq:'',fe:{},prof:{name:'Aarav Shah',email:'aarav@example.com',mobile:'',pref:{email:true,sms:false,push:false}}}}
+B('SV-2026-014','CUST-12','Manish Gandhi','FS-06',4,'Manish Gandhi +3','Rejected',['Requested 21 Oct 2026','Rejected: slot reserved for company use'])],inv:{},air:{status:'In service'},lf:'All',bv:'slot',auth:null,am:'login',ar:'pax',ae:'',lq:'',fe:{},prof:{name:'Aarav Shah',email:'aarav@example.com',mobile:'',pref:{email:true,sms:false,push:false}}}}
 const sl=id=>S.slots.find(s=>s.id==id),bkOf=id=>S.bk.find(b=>b.id==id),pn=id=>(S.pilots.find(p=>p.id==id)||{}).n||'Unassigned';
 const used=s=>S.bk.filter(b=>b.s==s&&(b.st=='Confirmed'||b.st=='Completed')).reduce((a,b)=>a+b.n,0),left=s=>8-used(s);
-const T=(d,t)=>new Date(d+'T'+t+':00+05:30').getTime(),fd=d=>new Date(d+'T00:00:00+05:30').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+const T=(d,t)=>new Date(d+'T'+t+':00+05:30').getTime(),fd=d=>new Date(d+'T00:00:00+05:30').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric',timeZone:'Asia/Kolkata'});
 function overlap(a,b){return T(a.d,a.dep)-BUF*6e4<T(b.d,b.arr)&&T(b.d,b.dep)-BUF*6e4<T(a.d,a.arr)}
 const live=s=>s.st!='cancelled';
 const conflicts=s=>S.slots.filter(o=>o.id!=s.id&&live(o)&&o.st!='draft'&&live(s)&&overlap(s,o));
@@ -81,7 +81,27 @@ $('yes').onclick=()=>{const r=reason?$('rs').value.trim():'';if(reason&&!r){$('m
 function setMode(m){S.mode=m;render()}
 const X=t=>String(t==null?'':t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const bd=s=>'<span class="badge b-'+s.split(' ')[0]+'">'+s+'</span>';
-function render(){$('mp').className=S.mode=='pax'?'on':'';$('ma').className=S.mode=='adm'?'on':'';$('app').innerHTML=S.mode=='pax'?pax():adm();$('dr').innerHTML=drawer()}
+function authView(){const l=S.am=='login',p=S.ar=='pax',T=(a,t)=>'<button class="'+(S.ar==a?'p':'')+'" style="flex:1" onclick="S.ar=\''+a+'\';S.ae=\'\';render()">'+t+'</button>',I=(id,lb,ty,ph)=>'<label for="'+id+'">'+lb+'</label><input id="'+id+'" type="'+(ty||'text')+'" placeholder="'+(ph||'')+'" autocomplete="off"'+(id=='ac'||(l&&id=='ap')?' onkeydown="if(event.key==\'Enter\')doAuth()"':'')+'>';
+return '<div class="pax" style="padding-bottom:30px"><div style="text-align:center;margin:18px 0"><div style="font:600 30px Georgia;letter-spacing:.12em">SKY<span style="color:var(--gold)">VAULT</span></div><div style="color:var(--sl)">Private Aviation · working name</div></div><div class="card"><div class="row" style="margin-bottom:12px;flex-wrap:nowrap">'+T('pax','Passenger')+T('staff','Staff')+'</div><h2>'+(l?'Sign in':'Create account')+(p?'':' · Staff')+'</h2>'
++(!l?I('an','Full name'):'')+(l?I('au',p?'Email or mobile number':'Work email','text',p?'you@example.com or 98XXXXXXXX':'name@company.example'):I('au',p?'Email':'Work email','email'))+(!l&&p?I('am','Mobile number (+91)','text','10-digit number'):'')
++(!p?'<label for="ar_">Role (simulated)</label><select id="ar_">'+['Booking Administrator','Operations Manager','Accounts user','System Administrator'].map(o=>'<option>'+o+'</option>').join('')+'</select>':'')+I('ap','Password','password')+(!l?I('ac','Confirm password','password'):'')
++(S.ae?'<div class="err" role="alert">'+S.ae+'</div>':'')+'<div class="note">Demo mode: any password is accepted. Real authentication and server-side access control are built in production.</div><button class="p" style="width:100%;padding:12px" onclick="doAuth()">'+(l?'Sign in':(p?'Create account':'Submit staff registration'))+'</button>'+(l?'<button style="width:100%;margin-top:8px" onclick="demoFill()">Use demo credentials</button>':'')
++'<p style="text-align:center;margin:14px 0 0">'+(l?'New here? <a href="#" onclick="S.am=\'reg\';S.ae=\'\';render();return false">Create an account</a>':'Already registered? <a href="#" onclick="S.am=\'login\';S.ae=\'\';render();return false">Sign in</a>')+'</p>'+(!p&&!l?'<div class="note">In production, staff accounts are created or approved by the System Administrator. In this demo you are signed in straight away.</div>':'')+'</div></div>'}
+function demoFill(){$('au').value=S.ar=='pax'?'aarav@example.com':'ops@company.example';$('ap').value='anything'}
+function doAuth(){const l=S.am=='login',p=S.ar=='pax',g=i=>$(i)?$(i).value.trim():'',pw=$('ap').value,em=g('au');let e='';
+if(!l&&!g('an'))e='Enter your full name.';
+else if(l&&p&&!em)e='Enter your email or mobile number.';
+else if(!(l&&p)&&!/\S+@\S+\.\S+/.test(em))e='Enter a valid email address.';
+else if(!l&&p&&!/^[6-9]\d{9}$/.test(g('am')))e='Enter a 10-digit Indian mobile number starting with 6 to 9.';
+else if(!pw)e='Enter a password. In this demo any password is accepted.';
+else if(!l&&pw!==$('ac').value)e='Passwords do not match.';
+if(e){S.ae=e;render();return}
+S.ae='';if(p){if(!l){ME='CUST-'+(20+S.seq);S.prof={name:g('an'),email:em,mobile:g('am'),pref:{email:true,sms:false,push:false}}}S.auth={role:'pax',name:S.prof.name};S.mode='pax';S.pv='home'}
+else{S.auth={role:'staff',name:g('an')||em.split('@')[0],rn:$('ar_').value};S.mode='adm';S.av='dash'}
+render();toast(l?'Signed in (demo)':'Account created (demo)')}
+function render(){const a=!!S.auth;['mp','ma','so','who'].forEach(i=>$(i).style.display=a?'':'none');const h=document.querySelector('.hb');if(h)h.style.display=a?'':'none';
+if(!a){$('app').innerHTML=authView();$('dr').innerHTML='';return}
+$('who').textContent=S.auth.name+(S.auth.rn?' · '+S.auth.rn:'');$('mp').className=S.mode=='pax'?'on':'';$('ma').className=S.mode=='adm'?'on':'';$('app').innerHTML=S.mode=='pax'?pax():adm();$('dr').innerHTML=drawer()}
 function go(k){S.av=k;S.err='';S.sel=null;S.note='';S.menu=0;render()}
 function pgo(k){S.pv=k;S.err='';S.menu=0;render()}
 const nx=()=>S.slots.find(s=>live(s)&&s.d>='2026-10-24');
@@ -132,7 +152,7 @@ function submit(){const f=S.form,id='SV-2026-'+String(S.seq++).padStart(3,'0');S
 function lookup(){S.q=$('q').value.trim();const b=bkOf(S.q);if(!b){S.err='No booking found with that reference.'}else if(b.c!=ME){S.err='Access denied: this booking belongs to another customer.'}else{S.err='';S.sel=b.id;S.pv='bd'}render()}
 /* ---------- ADMIN ---------- */
 const NAV=[['dash','Dashboard'],['bk','Bookings'],['sch','Schedule'],['crew','Pilots'],['ops','Flight operations'],['cus','Customers'],['air','Aircraft'],['inv','Invoices'],['log','Activity log']];
-function adm(){const v=S.av;let m='<div class="crumb">Admin / '+NAV.find(x=>x[0]==v)[1]+' · simulated roles, not real security</div>';
+function adm(){const v=S.av;let m='<div class="crumb">Admin / '+NAV.find(x=>x[0]==v)[1]+(S.auth&&S.auth.rn?' · '+S.auth.rn:'')+' · simulated roles, not real security</div>';
 if(v=='dash'){const c=st=>S.bk.filter(b=>b.st.startsWith(st)).length,up=S.slots.filter(s=>live(s)&&s.d>='2026-10-24'),att=S.bk.filter(b=>b.st=='Pending'||b.st.startsWith('Info')),raise=S.bk.filter(b=>b.st=='Completed'&&!(S.inv[b.id]&&S.inv[b.id].st=='Issued')).length,done=S.slots.filter(s=>s.ops=='Completed'),hrs=done.reduce((a,s)=>a+dur(s),0),seats=up.reduce((a,s)=>a+used(s.id),0),n=nx();
 m+='<h1>Executive dashboard</h1><div class="note">All figures come from the illustrative demo records. Today is 24 Oct 2026 (IST).</div><div class="grid">'+[['Total requests',S.bk.length],['Pending approvals',c('Pending')],['Confirmed upcoming',c('Confirmed')],['Completed trips',c('Completed')],['Rejected / cancelled',c('Rejected')+c('Cancelled')],['Invoices to raise',raise]].map(k=>'<div class="card kpi"><b>'+k[1]+'</b>'+k[0]+'</div>').join('')+'</div>'
 +'<div class="two"><div class="card"><h3>Needs your attention</h3>'+(att.map(b=>'<div class="row" style="justify-content:space-between;padding:4px 0">'+b.id+' · '+X(b.cn)+' · '+b.n+' pax '+bd(b.st)+'<button onclick="S.av=\'bk\';S.sel=\''+b.id+'\';render()">Review</button></div>').join('')||'No requests waiting.')+'<div style="margin-top:8px">'+S.slots.filter(s=>s.st=='draft').length+' draft slot(s) not yet published · '+up.filter(s=>!s.pilot&&s.st!='draft').length+' upcoming flight(s) without a pilot · '+raise+' completed booking(s) awaiting invoice</div></div>'
